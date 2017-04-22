@@ -1,4 +1,4 @@
-SquareMoose 1.0
+IsFileExist-EmailNotifier 1.0
 ==================
 Stable version released on: 22-04-2017
 
