@@ -30,18 +30,16 @@ public class FileChecker {
     private static String directoryPath;
     private static List<String> files = new ArrayList<>();
     private static ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
-    private static ScheduledFuture<?> checkerHandler;
 
     public FileChecker(String[] args) {
         LOG.info("Checking if directory exist.");
 
-        directoryPath = args[0];
+        directoryPath = args[0]; // path to directory
         files.addAll(Arrays.asList(args).subList(1, args.length));
     }
 
     public void prepare() {
         try {
-            config = new Properties();
             config.load(new FileInputStream("./" + Globals.CONFIG_FILENAME));
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,7 +48,7 @@ public class FileChecker {
     }
 
     public boolean isArgsValid() {
-        if (!Util.isStringValid(directoryPath) && !Files.isDirectory(Paths.get(directoryPath)) && config != null) {
+        if (!Util.isStringValid(directoryPath) || !Files.isDirectory(Paths.get(directoryPath)) || config == null) {
             LOG.error("Specified directory not exist!");
             return false;
         }
@@ -61,11 +59,11 @@ public class FileChecker {
     public void start() {
         for (String file : files) {
             String filePath = directoryPath + '\\' + file;
-            checkerHandler = exec.scheduleAtFixedRate(new Checker(filePath, config), 0, 5, TimeUnit.SECONDS);
+            exec.scheduleAtFixedRate(new Checker(filePath, config), 0, 5, TimeUnit.SECONDS);
         }
     }
 
-    public static boolean isLastFileToCheck() {
+    public static synchronized boolean isLastFileToCheck() {
         if (files.isEmpty())
             return true;
         return false;
@@ -78,5 +76,29 @@ public class FileChecker {
     public static void removeFromList(String filePath) {
         Path path = Paths.get(filePath);
         files.remove(path.getFileName().toString());
+    }
+
+    public static Properties getConfig() {
+        return config;
+    }
+
+    public static void setConfig(Properties config) {
+        FileChecker.config = config;
+    }
+
+    public static String getDirectoryPath() {
+        return directoryPath;
+    }
+
+    public static void setDirectoryPath(String directoryPath) {
+        FileChecker.directoryPath = directoryPath;
+    }
+
+    public static List<String> getFiles() {
+        return files;
+    }
+
+    public static void setFiles(List<String> files) {
+        FileChecker.files = files;
     }
 }

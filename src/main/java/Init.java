@@ -1,3 +1,4 @@
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
@@ -7,7 +8,6 @@ import java.util.Arrays;
  */
 public class Init {
     private static final Logger LOG = Logger.getLogger(Init.class);
-
     public static void main(String[] args) {
         LOG.info("Program stared with args: " + Arrays.toString(args));
 
