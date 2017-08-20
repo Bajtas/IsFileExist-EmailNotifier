@@ -21,4 +21,4 @@ Please check app.config file in project root directory.
 ![Alt text](/img/app_config.jpg?raw=true "How APP config looks")
 
 Settings must be filled according your SMTP provider.
-Default settings are adjusted to be working with GMail.
+Default settings are adjusted to work with GMail.
